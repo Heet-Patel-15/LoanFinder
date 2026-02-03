@@ -1,0 +1,148 @@
+<!-- loans/templates/loans/home.html -->
+
+{% extends 'loans/base.html' %}
+{% load static %}
+
+{% block title %}Home - Loan Finder{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="hero-section text-white text-center py-5">
+    <div class="container">
+        <h1 class="display-4 fw-bold mb-3">Find Your Perfect Loan</h1>
+        <p class="lead mb-4">Compare and choose from hundreds of loan options tailored to your needs</p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{% url 'loan_finder' %}" class="btn btn-light btn-lg">
+                <i class="fas fa-search"></i> Find a Loan
+            </a>
+            <a href="{% url 'loan_list' %}" class="btn btn-outline-light btn-lg">
+                <i class="fas fa-list"></i> Browse All Loans
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Loan Types Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Loan Types We Offer</h2>
+        <div class="row g-4">
+            {% for code, name in loan_types %}
+            <div class="col-md-4 col-sm-6">
+                <div class="card loan-type-card h-100 text-center">
+                    <div class="card-body">
+                        <div class="loan-icon mb-3">
+                            {% if code == 'home' %}
+                                <i class="fas fa-home fa-3x text-primary"></i>
+                            {% elif code == 'education' %}
+                                <i class="fas fa-graduation-cap fa-3x text-success"></i>
+                            {% elif code == 'personal' %}
+                                <i class="fas fa-user fa-3x text-info"></i>
+                            {% elif code == 'car' %}
+                                <i class="fas fa-car fa-3x text-warning"></i>
+                            {% elif code == 'business' %}
+                                <i class="fas fa-briefcase fa-3x text-danger"></i>
+                            {% endif %}
+                        </div>
+                        <h5 class="card-title">{{ name }}</h5>
+                        <p class="card-text text-muted">Get the best rates for {{ name|lower }}s</p>
+                        <a href="{% url 'loan_list' %}?loan_type={{ code }}" class="btn btn-outline-primary">
+                            Explore Options
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- Featured Loans Section -->
+<section class="py-5 bg-light">
+    <div class="container">
+        <h2 class="text-center mb-5">Featured Loan Options</h2>
+        <div class="row g-4">
+            {% for loan in featured_loans %}
+            <div class="col-md-4">
+                <div class="card loan-card h-100">
+                    <div class="card-header bg-primary text-white">
+                        <h5 class="mb-0">{{ loan.bank.name }}</h5>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title">{{ loan.loan_name }}</h6>
+                        <div class="loan-details mb-3">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Interest Rate:</span>
+                                <strong class="text-primary">{{ loan.interest_rate }}%</strong>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Loan Amount:</span>
+                                <strong>₹{{ loan.min_amount|floatformat:0 }} - ₹{{ loan.max_amount|floatformat:0 }}</strong>
+                            </div>
+                            <div class="d-flex justify-content-between">
+                                <span class="text-muted">Tenure:</span>
+                                <strong>{{ loan.min_tenure_months }}-{{ loan.max_tenure_months }} months</strong>
+                            </div>
+                        </div>
+                        <a href="{% url 'loan_detail' loan.pk %}" class="btn btn-primary w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12 text-center">
+                <p class="text-muted">No featured loans available at the moment.</p>
+                <a href="{% url 'loan_list' %}" class="btn btn-primary">Browse All Loans</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+<!-- How It Works Section -->
+<section class="py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">How It Works</h2>
+        <div class="row g-4">
+            <div class="col-md-3 col-sm-6 text-center">
+                <div class="step-icon mb-3">
+                    <i class="fas fa-search fa-3x text-primary"></i>
+                </div>
+                <h5>1. Search</h5>
+                <p class="text-muted">Browse or search for loans that match your requirements</p>
+            </div>
+            <div class="col-md-3 col-sm-6 text-center">
+                <div class="step-icon mb-3">
+                    <i class="fas fa-filter fa-3x text-primary"></i>
+                </div>
+                <h5>2. Compare</h5>
+                <p class="text-muted">Compare interest rates, tenure, and features</p>
+            </div>
+            <div class="col-md-3 col-sm-6 text-center">
+                <div class="step-icon mb-3">
+                    <i class="fas fa-file-alt fa-3x text-primary"></i>
+                </div>
+                <h5>3. Apply</h5>
+                <p class="text-muted">Fill out a simple application form</p>
+            </div>
+            <div class="col-md-3 col-sm-6 text-center">
+                <div class="step-icon mb-3">
+                    <i class="fas fa-check-circle fa-3x text-primary"></i>
+                </div>
+                <h5>4. Get Approved</h5>
+                <p class="text-muted">Receive approval and get your loan</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section text-white text-center py-5">
+    <div class="container">
+        <h2 class="mb-3">Ready to Find Your Perfect Loan?</h2>
+        <p class="lead mb-4">Start your loan search now and get the best deals</p>
+        <a href="{% url 'loan_finder' %}" class="btn btn-light btn-lg">
+            <i class="fas fa-rocket"></i> Get Started
+        </a>
+    </div>
+</section>
+{% endblock %}

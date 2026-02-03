@@ -1,0 +1,369 @@
+/* loans/static/css/style.css */
+
+:root {
+    --primary-color: #0d6efd;
+    --secondary-color: #6c757d;
+    --success-color: #198754;
+    --info-color: #0dcaf0;
+    --warning-color: #ffc107;
+    --danger-color: #dc3545;
+}
+
+/* General Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* Hero Section */
+.hero-section {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 80px 0;
+}
+
+/* CTA Section */
+.cta-section {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    padding: 60px 0;
+}
+
+/* Loan Type Cards */
+.loan-type-card {
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.loan-type-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    border-color: var(--primary-color);
+}
+
+.loan-icon {
+    padding: 20px;
+}
+
+/* Loan Cards */
+.loan-card {
+    transition: all 0.3s ease;
+    border: none;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+.loan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+}
+
+.loan-card .card-header {
+    font-weight: 600;
+}
+
+.loan-details .d-flex {
+    padding: 8px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.loan-details .d-flex:last-child {
+    border-bottom: none;
+}
+
+/* Loan Info Items */
+.info-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.info-item:last-child {
+    border-bottom: none;
+}
+
+.info-item i {
+    font-size: 1.2rem;
+    width: 25px;
+}
+
+/* Detail Box */
+.detail-box {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    height: 100%;
+}
+
+.detail-box i {
+    font-size: 2rem;
+}
+
+/* Loan Result Cards */
+.loan-result-card {
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.loan-result-card:hover {
+    border-color: var(--success-color);
+    box-shadow: 0 5px 20px rgba(25, 135, 84, 0.2);
+}
+
+.loan-highlights {
+    background-color: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+}
+
+.highlight-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* Filter Section */
+.card-header h5 {
+    font-weight: 600;
+}
+
+/* Step Icons */
+.step-icon {
+    transition: all 0.3s ease;
+}
+
+.step-icon:hover {
+    transform: scale(1.1);
+}
+
+/* Buttons */
+.btn {
+    padding: 10px 20px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.btn-lg {
+    padding: 12px 30px;
+    font-size: 1.1rem;
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    border-radius: 8px;
+    border: 1px solid #ced4da;
+    padding: 10px 15px;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.15);
+}
+
+.form-label {
+    font-weight: 500;
+    margin-bottom: 8px;
+    color: #495057;
+}
+
+/* Alerts */
+.alert {
+    border-radius: 10px;
+    border: none;
+}
+
+/* Footer */
+footer {
+    margin-top: auto;
+}
+
+footer a {
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer a:hover {
+    color: var(--primary-color) !important;
+}
+
+/* Badges */
+.badge {
+    padding: 6px 12px;
+    font-weight: 500;
+    border-radius: 6px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.loan-card,
+.loan-type-card {
+    animation: fadeIn 0.5s ease-out;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-section {
+        padding: 50px 0;
+    }
+    
+    .hero-section h1 {
+        font-size: 2rem;
+    }
+    
+    .detail-box {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .info-item {
+        flex-direction: column;
+        text-align: center;
+    }
+}
+
+/* Loading Animation */
+.loading {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255,255,255,.3);
+    border-radius: 50%;
+    border-top-color: #fff;
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.navbar-brand {
+    font-weight: 700;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    font-weight: 500;
+    padding: 8px 16px !important;
+    transition: all 0.3s ease;
+}
+
+.nav-link:hover {
+    color: #fff !important;
+    background-color: rgba(255,255,255,0.1);
+    border-radius: 6px;
+}
+
+/* Card Improvements */
+.card {
+    border: none;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.card-header {
+    border-bottom: none;
+    padding: 1rem 1.5rem;
+}
+
+.card-body {
+    padding: 1.5rem;
+}
+
+.card-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(0,0,0,0.05);
+}
+
+/* List Group */
+.list-group-item {
+    border: none;
+    padding: 12px 0;
+}
+
+/* Animations for JavaScript features */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+/* Back to top button styles */
+.btn-back-to-top {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    display: none;
+    z-index: 1000;
+}
+
+.btn-back-to-top:hover {
+    transform: scale(1.1) !important;
+}
+
+/* Form validation styles */
+.was-validated .form-control:invalid {
+    border-color: #dc3545;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle cx='6' cy='8.2' r='.6' fill='%23dc3545' stroke='none'/%3e%3c/svg%3e");
+}
+
+.was-validated .form-control:valid {
+    border-color: #198754;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
+}
+
+/* Spinner for loading */
+.spinner-border-sm {
+    width: 1rem;
+    height: 1rem;
+    border-width: 0.15em;
+}
+
+/* Notification animation */
+.alert {
+    animation: slideInDown 0.5s ease-out;
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

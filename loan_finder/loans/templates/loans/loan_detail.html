@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Loan Details | LoanFinder</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #4e73df, #1cc88a);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            max-width: 500px;
+            width: 90%;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        h1 {
+            color: #2e3a59;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .detail {
+            text-align: left;
+            margin: 15px 0;
+            padding: 12px 18px;
+            border-left: 4px solid #4e73df;
+            background: #f8f9fc;
+            border-radius: 8px;
+        }
+
+        .label {
+            display: block;
+            font-weight: 600;
+            color: #5a5c69;
+        }
+
+        .value {
+            color: #2e3a59;
+            font-size: 1.05rem;
+            margin-top: 4px;
+        }
+
+        .btn {
+            display: inline-block;
+            margin-top: 25px;
+            background: #4e73df;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: 0.3s;
+        }
+
+        .btn:hover {
+            background: #2e59d9;
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 0.85rem;
+            color: #6c757d;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h1>Loan Details</h1>
+
+        <div class="detail">
+            <span class="label">Loan Type</span>
+            <span class="value">{{ loan.loan_type }}</span>
+        </div>
+
+        <div class="detail">
+            <span class="label">Amount</span>
+            <span class="value">₹{{ loan.amount }}</span>
+        </div>
+
+        <div class="detail">
+            <span class="label">Interest Rate</span>
+            <span class="value">{{ loan.interest_rate }}%</span>
+        </div>
+
+        <div class="detail">
+            <span class="label">Duration</span>
+            <span class="value">{{ loan.duration }} months</span>
+        </div>
+
+        {% if loan.description %}
+        <div class="detail">
+            <span class="label">Description</span>
+            <span class="value">{{ loan.description }}</span>
+        </div>
+        {% endif %}
+
+        <a href="{% url 'home' %}" class="btn">← Back to Home</a>
+
+        <footer>© 2025 LoanFinder App</footer>
+    </div>
+
+</body>
+</html>

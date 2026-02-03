@@ -1,0 +1,151 @@
+<!-- loans/templates/loans/loan_inquiry.html -->
+
+{% extends 'loans/base.html' %}
+
+{% block title %}Apply for Loan - Loan Finder{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="text-center mb-4">
+                <h1><i class="fas fa-file-contract"></i> Loan Application</h1>
+                <p class="lead text-muted">Fill out this form and we'll get back to you shortly</p>
+            </div>
+
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-user-edit"></i> Application Form</h5>
+                </div>
+                <div class="card-body">
+                    <form method="POST" action="{% url 'loan_inquiry' %}">
+                        {% csrf_token %}
+                        
+                        <!-- Personal Information -->
+                        <h5 class="mb-3 text-primary">
+                            <i class="fas fa-user"></i> Personal Information
+                        </h5>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-12">
+                                <label class="form-label">Full Name *</label>
+                                {{ form.name }}
+                                {% if form.name.errors %}
+                                <div class="text-danger small">{{ form.name.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Email Address *</label>
+                                {{ form.email }}
+                                {% if form.email.errors %}
+                                <div class="text-danger small">{{ form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Phone Number *</label>
+                                {{ form.phone }}
+                                {% if form.phone.errors %}
+                                <div class="text-danger small">{{ form.phone.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Loan Details -->
+                        <h5 class="mb-3 text-primary">
+                            <i class="fas fa-money-check"></i> Loan Details
+                        </h5>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Loan Type *</label>
+                                {{ form.loan_type }}
+                                {% if form.loan_type.errors %}
+                                <div class="text-danger small">{{ form.loan_type.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Loan Amount (₹) *</label>
+                                {{ form.loan_amount }}
+                                {% if form.loan_amount.errors %}
+                                <div class="text-danger small">{{ form.loan_amount.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Financial Information -->
+                        <h5 class="mb-3 text-primary">
+                            <i class="fas fa-chart-line"></i> Financial Information
+                        </h5>
+                        
+                        <div class="row g-3 mb-4">
+                            <div class="col-md-6">
+                                <label class="form-label">Monthly Income (₹) *</label>
+                                {{ form.monthly_income }}
+                                {% if form.monthly_income.errors %}
+                                <div class="text-danger small">{{ form.monthly_income.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label">Credit Score *</label>
+                                {{ form.credit_score }}
+                                <small class="form-text text-muted d-block">Score between 300-900</small>
+                                {% if form.credit_score.errors %}
+                                <div class="text-danger small">{{ form.credit_score.errors }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="col-md-12">
+                                <label class="form-label">Employment Type *</label>
+                                {{ form.employment_type }}
+                                {% if form.employment_type.errors %}
+                                <div class="text-danger small">{{ form.employment_type.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+
+                        <!-- Terms and Submit -->
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="terms" required>
+                            <label class="form-check-label" for="terms">
+                                I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a>
+                            </label>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane"></i> Submit Application
+                            </button>
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Info Section -->
+            <div class="row mt-4">
+                <div class="col-md-4 text-center mb-3">
+                    <i class="fas fa-shield-alt fa-2x text-primary mb-2"></i>
+                    <h6>Secure Process</h6>
+                    <small class="text-muted">Your information is safe with us</small>
+                </div>
+                <div class="col-md-4 text-center mb-3">
+                    <i class="fas fa-clock fa-2x text-primary mb-2"></i>
+                    <h6>Quick Response</h6>
+                    <small class="text-muted">Get reply within 24 hours</small>
+                </div>
+                <div class="col-md-4 text-center mb-3">
+                    <i class="fas fa-handshake fa-2x text-primary mb-2"></i>
+                    <h6>Expert Guidance</h6>
+                    <small class="text-muted">Professional loan advisors</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

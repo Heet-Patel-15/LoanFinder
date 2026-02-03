@@ -1,0 +1,436 @@
+<!-- loans/templates/loans/loan_finder.html -->
+
+{% extends 'loans/base.html' %}
+{% load static %}
+
+{% block title %}Find Your Loan - Loan Finder{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="text-center mb-5">
+        <h1><i class="fas fa-search"></i> Find Your Perfect Loan</h1>
+        <p class="lead text-muted">Answer a few questions and we'll find the best loan options for you</p>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Finder Form -->
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-wpforms"></i> Loan Requirements</h5>
+                </div>
+                <div class="card-body p-4">
+                    <form method="POST" action="{% url 'loan_finder' %}" id="loanFinderForm">
+                        {% csrf_token %}
+                        
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-tag me-2"></i>What type of loan do you need? *
+                            </label>
+                            {{ form.loan_type }}
+                            {% if form.loan_type.errors %}
+                                <div class="text-danger small mt-1">{{ form.loan_type.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-rupee-sign me-2"></i>How much loan amount do you need? *
+                            </label>
+                            {{ form.loan_amount }}
+                            <small class="form-text text-muted d-block">Enter amount in Indian Rupees (₹)</small>
+                            {% if form.loan_amount.errors %}
+                                <div class="text-danger small mt-1">{{ form.loan_amount.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="form-label fw-bold">
+                                <i class="fas fa-star me-2"></i>What is your credit score? (Optional)
+                            </label>
+                            {{ form.credit_score }}
+                            <small class="form-text text-muted d-block">
+                                This helps us show you loans you're eligible for (300-900)
+                            </small>
+                            {% if form.credit_score.errors %}
+                                <div class="text-danger small mt-1">{{ form.credit_score.errors }}</div>
+                            {% endif %}
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-search"></i> Find Matching Loans
+                            </button>
+                            <a href="{% url 'home' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-times"></i> Cancel
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Info Cards -->
+            <div class="row mt-4">
+                <div class="col-md-4 mb-3">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-bolt fa-2x text-primary mb-2"></i>
+                            <h6>Instant Results</h6>
+                            <small class="text-muted">Get matching loans instantly</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-shield-alt fa-2x text-success mb-2"></i>
+                            <h6>100% Secure</h6>
+                            <small class="text-muted">Your data is safe with us</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <div class="card text-center h-100">
+                        <div class="card-body">
+                            <i class="fas fa-gift fa-2x text-warning mb-2"></i>
+                            <h6>Best Rates</h6>
+                            <small class="text-muted">Compare and save money</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Results Section -->
+            {% if matching_loans is not None %}
+            <div class="mt-5">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <h3 class="mb-0">
+                        <i class="fas fa-list-ul"></i> Matching Loans 
+                        <span class="badge bg-primary">{{ matching_loans.count }}</span>
+                    </h3>
+                    {% if matching_loans %}
+                    <button class="btn btn-outline-primary btn-sm" onclick="window.print()">
+                        <i class="fas fa-print"></i> Print Results
+                    </button>
+                    {% endif %}
+                </div>
+
+                {% if matching_loans %}
+                <div class="row g-4">
+                    {% for loan in matching_loans %}
+                    <div class="col-md-6">
+                        <div class="card loan-result-card h-100">
+                            <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">{{ loan.bank.name }}</h6>
+                                <span class="badge bg-light text-success">{{ loan.get_loan_type_display }}</span>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">{{ loan.loan_name }}</h5>
+                                
+                                <!-- Interest Rate Highlight -->
+                                <div class="text-center my-3 p-3 bg-light rounded">
+                                    <h3 class="text-primary mb-0">{{ loan.interest_rate }}%</h3>
+                                    <small class="text-muted">Interest Rate</small>
+                                </div>
+
+                                <div class="loan-highlights mb-3">
+                                    <div class="highlight-item mt-2">
+                                        <i class="fas fa-money-bill-wave text-success"></i>
+                                        <span><strong>Amount:</strong> ₹{{ loan.min_amount|floatformat:0 }} - ₹{{ loan.max_amount|floatformat:0 }}</span>
+                                    </div>
+                                    <div class="highlight-item mt-2">
+                                        <i class="fas fa-calendar text-info"></i>
+                                        <span><strong>Tenure:</strong> {{ loan.min_tenure_months }}-{{ loan.max_tenure_months }} months</span>
+                                    </div>
+                                    <div class="highlight-item mt-2">
+                                        <i class="fas fa-star text-warning"></i>
+                                        <span><strong>Min Credit:</strong> {{ loan.min_credit_score }}</span>
+                                    </div>
+                                    <div class="highlight-item mt-2">
+                                        <i class="fas fa-percentage text-danger"></i>
+                                        <span><strong>Processing Fee:</strong> {{ loan.processing_fee }}%</span>
+                                    </div>
+                                </div>
+                                
+                                <p class="card-text small text-muted">{{ loan.description|truncatewords:20 }}</p>
+                            </div>
+                            <div class="card-footer bg-white d-flex gap-2">
+                                <a href="{% url 'loan_detail' loan.pk %}" class="btn btn-outline-primary flex-grow-1">
+                                    <i class="fas fa-info-circle"></i> Details
+                                </a>
+                                <button onclick="addToCompare({{ loan.id }})" class="btn btn-outline-secondary">
+                                    <i class="fas fa-balance-scale"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Apply Now CTA -->
+                <div class="card mt-4 border-success shadow">
+                    <div class="card-body text-center p-4">
+                        <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                        <h4 class="card-title">Found the Right Loan?</h4>
+                        <p class="card-text">Submit your application and get quick approval within 24-48 hours!</p>
+                        <a href="{% url 'loan_inquiry' %}" class="btn btn-success btn-lg">
+                            <i class="fas fa-paper-plane"></i> Apply Now
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Additional Actions -->
+                <div class="row mt-4">
+                    <div class="col-md-6 mb-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="fas fa-redo fa-2x text-primary mb-2"></i>
+                                <h6>Try Different Criteria</h6>
+                                <a href="{% url 'loan_finder' %}" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-search"></i> New Search
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <div class="card text-center">
+                            <div class="card-body">
+                                <i class="fas fa-list fa-2x text-info mb-2"></i>
+                                <h6>Browse All Loans</h6>
+                                <a href="{% url 'loan_list' %}" class="btn btn-outline-info btn-sm">
+                                    <i class="fas fa-th"></i> View All
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {% else %}
+                <!-- No Results Found -->
+                <div class="alert alert-warning shadow">
+                    <div class="text-center py-4">
+                        <i class="fas fa-exclamation-triangle fa-3x mb-3"></i>
+                        <h5><i class="fas fa-frown"></i> No Matching Loans Found</h5>
+                        <p class="mb-3">We couldn't find loans matching your exact criteria. Here are some suggestions:</p>
+                        <ul class="list-unstyled">
+                            <li class="mb-2">
+                                <i class="fas fa-arrow-right text-primary"></i> 
+                                Try adjusting your loan amount
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-arrow-right text-success"></i> 
+                                Consider a different loan type
+                            </li>
+                            <li class="mb-2">
+                                <i class="fas fa-arrow-right text-info"></i> 
+                                Improve your credit score for better options
+                            </li>
+                            <li>
+                                <i class="fas fa-arrow-right text-warning"></i> 
+                                Browse all available loans
+                            </li>
+                        </ul>
+                        <div class="mt-4">
+                            <a href="{% url 'loan_list' %}" class="btn btn-primary me-2">
+                                <i class="fas fa-list"></i> Browse All Loans
+                            </a>
+                            <a href="{% url 'loan_finder' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-redo"></i> Try Again
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Alternative Suggestions -->
+                <div class="card mt-4">
+                    <div class="card-header bg-info text-white">
+                        <h5 class="mb-0"><i class="fas fa-lightbulb"></i> Tips to Get Better Results</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <h6><i class="fas fa-chart-line text-success"></i> Improve Credit Score</h6>
+                                <p class="small text-muted">A higher credit score (750+) unlocks better loan offers with lower interest rates.</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h6><i class="fas fa-money-check text-primary"></i> Flexible Amount</h6>
+                                <p class="small text-muted">Consider adjusting your loan amount slightly to match available options.</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h6><i class="fas fa-university text-info"></i> Multiple Banks</h6>
+                                <p class="small text-muted">Different banks have different eligibility criteria. Browse all options.</p>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <h6><i class="fas fa-file-alt text-warning"></i> Documentation</h6>
+                                <p class="small text-muted">Keep all required documents ready for faster loan approval.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+            {% endif %}
+
+            <!-- Why Choose Us Section -->
+            {% if not matching_loans %}
+            <div class="card mt-5 border-primary">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-question-circle"></i> Why Use Our Loan Finder?</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <i class="fas fa-check-circle fa-2x text-success me-3"></i>
+                                <div>
+                                    <h6>Compare Multiple Banks</h6>
+                                    <p class="small text-muted mb-0">Get loan offers from multiple banks in one place</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <i class="fas fa-bolt fa-2x text-warning me-3"></i>
+                                <div>
+                                    <h6>Instant Results</h6>
+                                    <p class="small text-muted mb-0">Find matching loans in seconds, not hours</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <i class="fas fa-shield-alt fa-2x text-info me-3"></i>
+                                <div>
+                                    <h6>100% Secure</h6>
+                                    <p class="small text-muted mb-0">Your personal information is completely safe</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div class="d-flex">
+                                <i class="fas fa-rupee-sign fa-2x text-danger me-3"></i>
+                                <div>
+                                    <h6>Save Money</h6>
+                                    <p class="small text-muted mb-0">Find the best interest rates and save thousands</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            <!-- FAQ Section -->
+            <div class="card mt-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="fas fa-question"></i> Frequently Asked Questions</h5>
+                </div>
+                <div class="card-body">
+                    <div class="accordion" id="faqAccordion">
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq1">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse1">
+                                    How accurate are the loan matches?
+                                </button>
+                            </h2>
+                            <div id="collapse1" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Our loan finder uses real-time data from banks to show you the most accurate matches based on your requirements and eligibility.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq2">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse2">
+                                    Do I need to provide my credit score?
+                                </button>
+                            </h2>
+                            <div id="collapse2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Credit score is optional but recommended. It helps us show you loans you're more likely to get approved for.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq3">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse3">
+                                    Is my information secure?
+                                </button>
+                            </h2>
+                            <div id="collapse3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Yes! We use industry-standard encryption to protect your data. We never share your information without your consent.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="faq4">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapse4">
+                                    How long does it take to get approved?
+                                </button>
+                            </h2>
+                            <div id="collapse4" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                                <div class="accordion-body">
+                                    Approval times vary by bank and loan type, but typically take 24-48 hours for most personal and education loans.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+console.log('Loan Finder Page Loaded');
+
+// Form validation
+document.getElementById('loanFinderForm').addEventListener('submit', function(e) {
+    const loanType = document.querySelector('select[name="loan_type"]').value;
+    const loanAmount = document.querySelector('input[name="loan_amount"]').value;
+    
+    if (!loanType) {
+        e.preventDefault();
+        showNotification('Please select a loan type', 'warning');
+        return false;
+    }
+    
+    if (!loanAmount || loanAmount <= 0) {
+        e.preventDefault();
+        showNotification('Please enter a valid loan amount', 'warning');
+        return false;
+    }
+    
+    // Show loading state
+    const submitBtn = this.querySelector('button[type="submit"]');
+    submitBtn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Searching...';
+    submitBtn.disabled = true;
+});
+
+// Credit score helper
+const creditScoreInput = document.querySelector('input[name="credit_score"]');
+if (creditScoreInput) {
+    creditScoreInput.addEventListener('blur', function() {
+        const score = parseInt(this.value);
+        if (score) {
+            const message = checkCreditScoreEligibility(score);
+            console.log('Credit Score Eligibility:', message);
+        }
+    });
+}
+
+// Loan amount formatter
+const loanAmountInput = document.querySelector('input[name="loan_amount"]');
+if (loanAmountInput) {
+    loanAmountInput.addEventListener('blur', function() {
+        if (this.value) {
+            const formatted = formatCurrency(this.value);
+            console.log('Loan Amount:', formatted);
+        }
+    });
+}
+</script>
+{% endblock %}
